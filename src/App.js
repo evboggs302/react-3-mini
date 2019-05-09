@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import logo from './mainStreetAuto.svg';
-import axios from 'axios';
-import './App.css';
+import React, { Component } from "react";
+import logo from "./mainStreetAuto.svg";
+import axios from "axios";
+import "./App.css";
 
 // Toast notification dependencies
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 
 class App extends Component {
   constructor(props) {
@@ -31,6 +31,15 @@ class App extends Component {
   getVehicles() {
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+    axios
+      .get("https://joes-autos.herokuapp.com/api/vehicles")
+      .then(response => {
+        toast.success("successful");
+        this.setState({
+          vehiclesToDisplay: response.data
+        });
+      })
+      .catch(err => toast.error("this errored"));
   }
 
   getPotentialBuyers() {
@@ -41,6 +50,15 @@ class App extends Component {
   sellCar(id) {
     // axios (DELETE)
     // setState with response -> vehiclesToDisplay
+    axios
+      .delete(`https://joes-autos.herokuapp.com/api/vehicles/${id}`)
+      .then(response => {
+        toast.success("successful");
+        this.setState({
+          vehiclesToDisplay: response.data.vehicles
+        });
+      })
+      .catch(err => toast.error("this errored"));
   }
 
   filterByMake() {
@@ -60,6 +78,16 @@ class App extends Component {
   updatePrice(priceChange, id) {
     // axios (PUT)
     // setState with response -> vehiclesToDisplay
+    axios
+      .put(`https://joes-autos.herokuapp.com/api/vehicles/${id}/${priceChange}`)
+      .then(response => {
+        console.log(response.data);
+        toast.success("successful");
+        this.setState({
+          vehiclesToDisplay: response.data.vehicles
+        });
+      })
+      .catch(err => toast.error("this errored"));
   }
 
   addCar() {
@@ -73,6 +101,15 @@ class App extends Component {
 
     // axios (POST)
     // setState with response -> vehiclesToDisplay
+    axios
+      .post(`https://joes-autos.herokuapp.com/api/vehicles/`, newCar)
+      .then(response => {
+        toast.success("successful");
+        this.setState({
+          vehiclesToDisplay: response.data.vehicles
+        });
+      })
+      .catch(err => toast.error("this errored"));
   }
 
   addBuyer() {
@@ -108,9 +145,9 @@ class App extends Component {
   // Do not edit the code below
   resetData(dataToReset) {
     axios
-      .get('https://joes-autos.herokuapp.com/api/' + dataToReset + '/reset')
+      .get("https://joes-autos.herokuapp.com/api/" + dataToReset + "/reset")
       .then(res => {
-        if (dataToReset === 'vehicles') {
+        if (dataToReset === "vehicles") {
           this.setState({ vehiclesToDisplay: res.data.vehicles });
         } else {
           this.setState({ buyersToDisplay: res.data.buyers });
@@ -131,14 +168,14 @@ class App extends Component {
 
           <button
             className="btn btn-sp"
-            onClick={() => this.updatePrice('up', v.id)}
+            onClick={() => this.updatePrice("up", v.id)}
           >
             Increase Price
           </button>
 
           <button
             className="btn btn-sp"
-            onClick={() => this.updatePrice('down', v.id)}
+            onClick={() => this.updatePrice("down", v.id)}
           >
             Decrease Price
           </button>
@@ -182,14 +219,14 @@ class App extends Component {
 
           <button
             className="header-btn1 btn"
-            onClick={() => this.resetData('vehicles')}
+            onClick={() => this.resetData("vehicles")}
           >
             Reset Vehicles
           </button>
 
           <button
             className="header-btn2 btn"
-            onClick={() => this.resetData('buyers')}
+            onClick={() => this.resetData("buyers")}
           >
             Reset Buyers
           </button>
